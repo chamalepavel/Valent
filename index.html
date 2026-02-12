@@ -3,282 +3,517 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quieres ser mi Valentine?</title>
+    <title>¿Quieres ser mi Valentine? 💕</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
+            font-family: 'Georgia', serif;
             min-height: 100vh;
-            background: linear-gradient(135deg, #1a0a0a, #2d1b2e 50%, #4a1a3a);
-            font-family: Georgia, serif;
+            background: linear-gradient(135deg, #1a0a0a 0%, #2d1515 50%, #1a0a0a 100%);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Efecto de partículas románticas */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
             overflow: hidden;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            font-size: 20px;
+            animation: float 8s infinite ease-in-out;
+            opacity: 0;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Pantalla principal */
+        .main-screen {
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
+            min-height: 100vh;
+            position: relative;
+            z-index: 2;
         }
-        .bg-effects { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
-        .float-rose { position: absolute; font-size: 2rem; animation: floatR 8s ease-in-out infinite; opacity: 0.6; }
-        @keyframes floatR {
-            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.6; }
-            90% { opacity: 0.6; }
-            100% { transform: translateY(-150px) rotate(360deg); opacity: 0; }
+
+        .title {
+            font-size: 3.5rem;
+            color: #ff6b6b;
+            text-shadow: 0 0 30px rgba(255, 107, 107, 0.5);
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
         }
-        .main-container {
-            position: relative; z-index: 10; text-align: center;
-            padding: 40px; background: rgba(255,255,255,0.05);
-            border-radius: 30px; backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
-        .heart-deco { font-size: 4rem; animation: heartbeat 1.5s ease-in-out infinite; display: inline-block; }
-        @keyframes heartbeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-        h1 {
+
+        .heart {
+            font-size: 120px;
+            animation: heartbeat 1.5s infinite;
+            margin: 20px 0;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            15% { transform: scale(1.15); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.1); }
+        }
+
+        .buttons-container {
+            display: flex;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 18px 50px;
+            font-size: 1.4rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
+            color: white;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+        }
+
+        .btn-yes:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 20px 40px rgba(255, 107, 107, 0.6);
+        }
+
+        .btn-no {
+            background: linear-gradient(135deg, #666, #444);
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-no:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Pantalla de flores */
+        .flower-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+            z-index: 2;
+        }
+
+        .flower-title {
+            font-size: 2.5rem;
+            color: #ff6b6b;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        /* Contenedor de la planta */
+        .plant-container {
+            position: relative;
+            width: 300px;
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        /* Maceta */
+        .pot {
+            width: 120px;
+            height: 100px;
+            background: linear-gradient(135deg, #8B4513, #654321);
+            border-radius: 10px 10px 40px 40px;
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .pot::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: -10px;
+            width: 140px;
+            height: 25px;
+            background: linear-gradient(135deg, #a0522d, #8B4513);
+            border-radius: 10px;
+        }
+
+        /* Tierra */
+        .soil {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            width: 80px;
+            height: 20px;
+            background: #3d2817;
+            border-radius: 50%;
+        }
+
+        /* Tallo */
+        .stem {
+            width: 8px;
+            height: 0;
+            background: linear-gradient(to right, #228B22, #32CD32, #228B22);
+            border-radius: 4px;
+            position: relative;
+            z-index: 5;
+            transition: height 3s ease-out;
+        }
+
+        .stem.grown {
+            height: 250px;
+        }
+
+        /* Hojas */
+        .leaf {
+            position: absolute;
+            width: 50px;
+            height: 30px;
+            background: linear-gradient(135deg, #228B22, #32CD32);
+            border-radius: 50% 0 50% 0;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.5s ease;
+        }
+
+        .leaf.left {
+            left: -50px;
+            top: 50%;
+        }
+
+        .leaf.right {
+            right: -50px;
+            top: 60%;
+            transform: scaleX(-1);
+        }
+
+        .leaf.grown {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Botón de semilla */
+        .seed-btn {
+            margin: 20px;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            background: linear-gradient(135deg, #8B4513, #654321);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 20;
+        }
+
+        .seed-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(139, 69, 19, 0.5);
+        }
+
+        /* Rosa */
+        .rose {
+            position: absolute;
+            top: -80px;
+            left: 50%;
+            transform: translateX(-50%) scale(0);
+            width: 100px;
+            height: 100px;
+            z-index: 15;
+            transition: all 1s ease;
+        }
+
+        .rose.bloom {
+            transform: translateX(-50%) scale(1);
+        }
+
+        /* Pétalos de rosa */
+        .petal {
+            position: absolute;
+            width: 30px;
+            height: 40px;
+            background: linear-gradient(135deg, #dc143c, #b22222);
+            border-radius: 50% 50% 50% 50%;
+            transform-origin: center bottom;
+            box-shadow: inset -5px -5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .petal:nth-child(1) { left: 35px; top: 40px; transform: rotate(0deg); }
+        .petal:nth-child(2) { left: 30px; top: 30px; transform: rotate(30deg); }
+        .petal:nth-child(3) { left: 40px; top: 30px; transform: rotate(-30deg); }
+        .petal:nth-child(4) { left: 25px; top: 35px; transform: rotate(60deg); }
+        .petal:nth-child(5) { left: 45px; top: 35px; transform: rotate(-60deg); }
+        .petal:nth-child(6) { left: 20px; top: 40px; transform: rotate(90deg); }
+        .petal:nth-child(7) { left: 50px; top: 40px; transform: rotate(-90deg); }
+
+        /* Centro de la rosa */
+        .rose-center {
+            position: absolute;
+            left: 35px;
+            top: 45px;
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle, #ff6b6b, #dc143c);
+            border-radius: 50%;
+        }
+
+        /* Ramo completo */
+        .bouquet {
+            display: none;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .mini-rose {
+            width: 60px;
+            height: 60px;
+            position: relative;
+            animation: sway 3s infinite ease-in-out;
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
+
+        .mini-rose .petal {
+            width: 20px;
+            height: 25px;
+        }
+
+        .mini-rose:nth-child(1) .petal { background: linear-gradient(135deg, #ff0000, #cc0000); }
+        .mini-rose:nth-child(2) .petal { background: linear-gradient(135deg, #ff69b4, #ff1493); }
+        .mini-rose:nth-child(3) .petal { background: linear-gradient(135deg, #ffa500, #ff8c00); }
+        .mini-rose:nth-child(4) .petal { background: linear-gradient(135deg, #9370db, #8a2be2); }
+        .mini-rose:nth-child(5) .petal { background: linear-gradient(135deg, #ff6347, #ff4500); }
+        .mini-rose:nth-child(6) .petal { background: linear-gradient(135deg, #ffd700, #ffb347); }
+
+        /* Mariachis */
+        .mariachi-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            margin: 30px 0;
+        }
+
+        .mariachi-title {
+            font-size: 2rem;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+        }
+
+        .mariachi-band {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .musician {
+            font-size: 60px;
+            animation: bounce 0.5s infinite alternate;
+        }
+
+        .musician:nth-child(1) { animation-delay: 0s; }
+        .musician:nth-child(2) { animation-delay: 0.1s; }
+        .musician:nth-child(3) { animation-delay: 0.2s; }
+        .musician:nth-child(4) { animation-delay: 0.3s; }
+        .musician:nth-child(5) { animation-delay: 0.4s; }
+
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+
+        /* Botón WhatsApp */
+        .whatsapp-btn {
+            margin: 20px;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .whatsapp-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.5);
+        }
+
+        /* Pantalla de error */
+        .error-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #8b0000, #ff0000, #8b0000);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+            animation: shake 0.5s infinite;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .error-title {
             font-size: 3rem;
-            background: linear-gradient(135deg, #ff6b9d, #ff1744, #ff8a80);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin: 20px 0; animation: glow 2s ease-in-out infinite alternate;
-            letter-spacing: 3px;
+            color: white;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
+            animation: blink 0.5s infinite;
         }
-        @keyframes glow { from { filter: drop-shadow(0 0 5px rgba(255,107,157,0.5)); } to { filter: drop-shadow(0 0 20px rgba(255,23,68,0.8)); } }
-        .subtitle { font-size: 1.2rem; color: rgba(255,255,255,0.7); font-style: italic; margin-bottom: 40px; }
-        .btn-container { display: flex; gap: 40px; justify-content: center; flex-wrap: wrap; }
-        .btn { padding: 20px 55px; font-size: 1.4rem; border: none; border-radius: 50px; cursor: pointer; transition: all 0.4s; font-family: Georgia, serif; letter-spacing: 2px; }
-        .btn-yes { background: linear-gradient(135deg, #ff6b9d, #ff1744, #ff8a80); color: white; box-shadow: 0 10px 30px rgba(255,23,68,0.4); }
-        .btn-yes:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 20px 40px rgba(255,23,68,0.6); }
-        .btn-no { background: linear-gradient(135deg, #424242, #757575); color: white; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        .btn-no:hover { transform: translateY(-5px) scale(1.05); }
-        
-        .celebration-container { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #1a0a0a, #2d1b2e 50%, #4a1a3a); z-index: 100; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
-        .celebration-title { font-size: 2.5rem; background: linear-gradient(135deg, #ff6b9d, #ffd700); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 30px; text-align: center; }
-        .flower-garden { display: flex; justify-content: center; align-items: flex-end; gap: 30px; flex-wrap: wrap; margin: 20px 0; }
-        .flower-plant { position: relative; display: flex; flex-direction: column; align-items: center; }
-        .stem { width: 8px; height: 0; background: linear-gradient(to top, #1b5e20, #4caf50); border-radius: 4px; animation: stemGrow 2s ease forwards; }
-        @keyframes stemGrow { to { height: 200px; } }
-        .leaf { position: absolute; width: 50px; height: 30px; background: linear-gradient(45deg, #2e7d32, #4caf50); border-radius: 50% 0 50% 0; opacity: 0; animation: leafApp 0.5s ease 1.5s forwards; }
-        .leaf.left { left: -50px; top: 40%; transform: rotate(-45deg); }
-        .leaf.right { right: -50px; top: 60%; transform: rotate(45deg) scaleX(-1); }
-        @keyframes leafApp { to { opacity: 1; } }
-        .flower-bloom { position: absolute; top: -80px; left: 50%; transform: translateX(-50%) scale(0); animation: bloomF 1.5s ease 2s forwards; }
-        @keyframes bloomF { 0% { transform: translateX(-50%) scale(0) rotate(0deg); } 50% { transform: translateX(-50%) scale(1.3) rotate(180deg); } 100% { transform: translateX(-50%) scale(1) rotate(360deg); } }
-        .petal { position: absolute; width: 40px; height: 65px; border-radius: 50% 50% 50% 50%; transform-origin: center bottom; }
-        .petal:nth-child(1) { transform: rotate(0deg) translateY(-32px); }
-        .petal:nth-child(2) { transform: rotate(45deg) translateY(-32px); }
-        .petal:nth-child(3) { transform: rotate(90deg) translateY(-32px); }
-        .petal:nth-child(4) { transform: rotate(135deg) translateY(-32px); }
-        .petal:nth-child(5) { transform: rotate(180deg) translateY(-32px); }
-        .petal:nth-child(6) { transform: rotate(225deg) translateY(-32px); }
-        .petal:nth-child(7) { transform: rotate(270deg) translateY(-32px); }
-        .petal:nth-child(8) { transform: rotate(315deg) translateY(-32px); }
-        .flower-center { position: absolute; width: 40px; height: 40px; border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%,-50%); z-index: 10; }
-        
-        .mariachi-container { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 200; flex-direction: column; align-items: center; justify-content: center; }
-        .mariachi-title { font-size: 3rem; color: #ffd700; text-align: center; margin-bottom: 40px; animation: mariachiP 0.5s ease-in-out infinite alternate; }
-        @keyframes mariachiP { from { transform: scale(1); } to { transform: scale(1.05); } }
-        .mariachi-bands { display: flex; justify-content: center; gap: 60px; flex-wrap: wrap; }
-        .mariachi-member { font-size: 4rem; animation: musicianB 1s ease-in-out infinite; }
-        .mariachi-member:nth-child(1) { animation-delay: 0s; }
-        .mariachi-member:nth-child(2) { animation-delay: 0.15s; }
-        .mariachi-member:nth-child(3) { animation-delay: 0.3s; }
-        .mariachi-member:nth-child(4) { animation-delay: 0.45s; }
-        .mariachi-member:nth-child(5) { animation-delay: 0.6s; }
-        @keyframes musicianB { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-        .continue-btn { margin-top: 40px; padding: 18px 45px; font-size: 1.3rem; background: linear-gradient(135deg, #ffd700, #ffaa00); color: #1a0a0a; border: none; border-radius: 50px; cursor: pointer; animation: pulseB 2s ease-in-out infinite; font-family: Georgia, serif; }
-        @keyframes pulseB { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-        
-        .share-container { display: none; margin-top: 30px; text-align: center; }
-        .share-btn { padding: 15px 40px; font-size: 1.2rem; background: #25D366; color: white; border: none; border-radius: 50px; cursor: pointer; font-family: Georgia, serif; transition: all 0.3s; }
-        .share-btn:hover { background: #128C7E; transform: scale(1.05); }
-        
-        .error-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #000, #1a0000 50%, #000); z-index: 300; flex-direction: column; align-items: center; justify-content: center; }
-        .error-content { text-align: center; }
-        .warning-icon { font-size: 6rem; margin-bottom: 20px; }
-        .error-title { font-size: 2.5rem; color: #ff0000; margin: 20px 0; text-shadow: 0 0 20px rgba(255,0,0,0.8); }
-        .timer { font-size: 4rem; color: #ff0000; font-weight: bold; text-shadow: 0 0 30px rgba(255,0,0,0.8); animation: timerP 1s ease-in-out infinite; }
-        @keyframes timerP { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-        .error-message { font-size: 1.5rem; color: #ff6666; margin-top: 20px; }
-        
-        .confetti-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 150; overflow: hidden; }
-        .confetti { position: absolute; width: 10px; height: 10px; animation: confettiF 3s ease-out forwards; }
-        @keyframes confettiF { 0% { transform: translateY(-100px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .countdown {
+            font-size: 5rem;
+            color: #ffff00;
+            font-weight: bold;
+            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .error-message {
+            font-size: 1.5rem;
+            color: white;
+            margin-top: 20px;
+        }
+
+        /* Confeti */
+        .confetti {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+            overflow: hidden;
+        }
+
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 20px;
+            animation: confetti-fall 3s infinite linear;
+        }
+
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Mensaje final */
+        .final-message {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .final-message h2 {
+            font-size: 2.5rem;
+            color: #ff6b6b;
+            margin-bottom: 20px;
+        }
+
+        .final-message p {
+            font-size: 1.3rem;
+            color: #fff;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .title { font-size: 2rem; }
+            .heart { font-size: 80px; }
+            .buttons-container { flex-direction: column; }
+            .btn { padding: 15px 40px; font-size: 1.2rem; }
+            .musician { font-size: 40px; }
+        }
     </style>
 </head>
 <body>
-    <div class="bg-effects" id="bgEffects"></div>
-    
-    <div class="main-container" id="mainContainer">
-        <div class="heart-deco">💕</div>
-        <h1>Quieres ser mi Valentine?</h1>
-        <p class="subtitle">Una pregunta especial para alguien especial...</p>
-        <div class="btn-container">
-            <button class="btn btn-yes" onclick="sayYes()">Si! 💖</button>
-            <button class="btn btn-no" onclick="sayNo()">No 😢</button>
+    <!-- Partículas románticas -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Pantalla principal -->
+    <div class="main-screen" id="mainScreen">
+        <h1 class="title">¿Quieres ser mi Valentine?</h1>
+        <div class="heart">💕</div>
+        <div class="buttons-container">
+            <button class="btn btn-yes" onclick="showFlowers()">¡Sí! 💖</button>
+            <button class="btn btn-no" onclick="showError()">No 😢</button>
         </div>
     </div>
 
-    <div class="celebration-container" id="celebrationContainer">
-        <h2 class="celebration-title">Saba que dirias que si! 💕</h2>
-        <div class="flower-garden">
-            <div class="flower-plant">
-                <div class="stem" style="animation-delay:0s;">
-                    <div class="leaf left"></div><div class="leaf right"></div>
-                    <div class="flower-bloom">
-                        <div class="petal" style="background:linear-gradient(135deg,#ff1744,#d50000);"></div>
-                        <div class="petal" style="background:linear-gradient(135deg,#ff1744,#d50000);"></div>
-                        <div class="petal" style="background:linear-gradient(135deg,#ff1744,#d50000);"></div>
-                        <div class="petal" style="background:linear-gradient(135deg,#ff1744,#d50000);"></div>
-                        <div class="petal" style="background:linear-gradient(135deg,#ff1744,#d50000);"></div>
-                        <div class="petal" style="background:linear-gradient(135deg,#ff1744,#d50000);"></div>
-                        <div class="petal" style="background:linear-gradient(135deg,#ff1744,#d50000);"></div>
-                        <div class="petal" style="background:linear-gradient(135deg,#ff1744,#d50000);"></div>
-                        <div class="flower-center" style="background:linear-gradient(135deg,#ffd700,#ffaa00);"></div>
-                    </div>
-                </div>
+    <!-- Pantalla de flores -->
+    <div class="flower-screen" id="flowerScreen">
+        <h2 class="flower-title">🌱 Planta tu amor y míralo florecer 🌹</h2>
+        
+        <div class="plant-container">
+            <div class="rose" id="rose">
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="rose-center"></div>
             </div>
-            <div class="flower-plant">
-                <div class="stem" style="animation-delay:0.3s;">
-                    <div class="leaf left"></div><div class="leaf right"></div>
-                    <div class="flower-bloom" style="animation-delay:2.3s;">
-                        <div class="petal" style="background:linear-gradient(135deg,#ff8c00,#ff4500);"></div>
-                        <div class="petal" style="background:linear-gradient(135deg,#ff8c00,#ff4500);"></div>
-                        <div class="petal" style="background:linear-gradient(135deg,#ff8c00,#ff4500);"></div>
-                        <div class="petal" style="background:linear-gradient(135deg,#ff8c00,#ff4500);"></div>
-                        <div class="petal" style="background:linear-gradient(135deg,#ff8c00,#ff4500);"></div>
-                        <div class="petal" style="background:linear-gradient(135deg,#ff8c00,#ff4500);"></div>
-                        <div class="petal" style="background:linear-gradient(135deg,#ff8c00,#ff4500);"></div>
-                        <div class="petal" style="background:linear-gradient(135deg,#ff8c00,#ff4500);"></div>
-                        <div class="flower-center" style="background:linear-gradient(135deg,#ff6347,#ff4500);"></div>
-                    </div>
-                </div>
+            
+            <div class="stem" id="stem">
+                <div class="leaf left"></div>
+                <div class="leaf right"></div>
             </div>
-            <div class="flower-plant">
-                <div class="stem" style="animation-delay:0.6s;">
-                    <div class="leaf left"></div><div class="leaf right"></div>
-                    <div class="flower-bloom" style="animation-delay:2.6s;">
-                        <div class="petal" style="background:linear-gradient(135deg,#9370db,#8a2be2);"></div>
-                        <div class="petal" style="background:linear-gradient(135deg,#9370db,#8a2be2);"></div>
-                        <div class="petal" style="background:linear-gradient(135deg,#9370db,#8a2be2);"></div>
-                        <div class="petal" style="background:linear-gradient(135deg,#9370db,#8a2be2);"></div>
-                        <div class="petal" style="background:linear-gradient(135deg,#9370db,#8a2be2);"></div>
-                        <div class="petal" style="background:linear-gradient(135deg,#9370db,#8a2be2);"></div>
-                        <div class="petal" style="background:linear-gradient(135deg,#9370db,#8a2be2);"></div>
-                        <div class="petal" style="background:linear-gradient(135deg,#9370db,#8a2be2);"></div>
-                        <div class="flower-center" style="background:linear-gradient(135deg,#da70d6,#ba55d3);"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <button class="continue-btn" onclick="showMariachi()">Ver Mas! 🎺</button>
-        <div class="share-container" id="shareContainer">
-            <button class="share-btn" onclick="shareWhatsApp()">Compartir en WhatsApp 📱</button>
-        </div>
-    </div>
-
-    <div class="mariachi-container" id="mariachiContainer">
-        <h2 class="mariachi-title">🎺 Los Mariachis Llegan! 🎺</h2>
-        <div class="mariachi-bands">
-            <div class="mariachi-member">🎻</div>
-            <div class="mariachi-member">🎺</div>
-            <div class="mariachi-member">🎸</div>
-            <div class="mariachi-member">🎵</div>
-            <div class="mariachi-member">💃</div>
-        </div>
-        <button class="continue-btn" onclick="showShare()">Continuar 💕</button>
-    </div>
-
-    <div class="error-screen" id="errorScreen">
-        <div class="error-content">
-            <div class="warning-icon">⚠️</div>
-            <h2 class="error-title">ERROR CRITICO!</h2>
-            <div class="timer" id="timer">10</div>
-            <p class="error-message">Tu celular se autodestruira en segundos...</p>
-        </div>
-    </div>
-
-    <div class="confetti-container" id="confettiContainer"></div>
-
-    <script>
-        // Efectos de fondo
-        function createBackgroundEffects() {
-            var bgEffects = document.getElementById('bgEffects');
-            var roses = ['🌹', '🌺', '🌸', '💕'];
-            for (var i = 0; i < 15; i++) {
-                var rose = document.createElement('div');
-                rose.className = 'float-rose';
-                rose.innerHTML = roses[Math.floor(Math.random() * roses.length)];
-                rose.style.left = Math.random() * 100 + '%';
-                rose.style.animationDelay = Math.random() * 8 + 's';
-                bgEffects.appendChild(rose);
-            }
-        }
-
-        // Boton SI - Celebracion
-        function sayYes() {
-            document.getElementById('mainContainer').style.display = 'none';
-            document.getElementById('celebrationContainer').style.display = 'flex';
-            createConfetti();
-        }
-
-        // Boton NO - Error
-        function sayNo() {
-            var errorScreen = document.getElementById('errorScreen');
-            errorScreen.style.display = 'flex';
             
-            var count = 10;
-            var timer = document.getElementById('timer');
-            
-            var countdown = setInterval(function() {
-                count--;
-                timer.textContent = count;
-                
-                if (count <= 0) {
-                    clearInterval(countdown);
-                    timer.textContent = '💥';
-                }
-            }, 1000);
-        }
-
-        // Mostrar mariachi
-        function showMariachi() {
-            document.getElementById('celebrationContainer').style.display = 'none';
-            document.getElementById('mariachiContainer').style.display = 'flex';
-        }
-
-        // Mostrar compartir
-        function showShare() {
-            document.getElementById('mariachiContainer').style.display = 'none';
-            document.getElementById('celebrationContainer').style.display = 'flex';
-            document.getElementById('shareContainer').style.display = 'block';
-            document.querySelector('.continue-btn').style.display = 'none';
-        }
-
-        // Compartir WhatsApp
-        function shareWhatsApp() {
-            var message = 'Acepte ser tu Valentine! 💕 Mira esta pagina especial: ' + window.location.href;
-            var whatsappUrl = 'https://wa.me/?text=' + encodeURIComponent(message);
-            window.open(whatsappUrl, '_blank');
-        }
-
-        // Confeti
-        function createConfetti() {
-            var container = document.getElementById('confettiContainer');
-            var colors = ['#ff6b6b', '#ffd700', '#ff69b4', '#32cd32', '#9370db', '#ff8c00'];
-            
-            for (var i = 0; i < 100; i++) {
-                var confetti = document.createElement('div');
-                confetti.className = 'confetti';
-                confetti.style.left = Math.random() * 100 + '%';
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.animationDelay = Math.random() * 3 + 's';
-                var size = 5 + Math.random() * 10;
-                confetti.style.width = size + 'px';
-                confetti.style.height = size + 'px';
-                container.appendChild(confetti);
-            }
-        }
-
-        // Iniciar efectos
-        createBackgroundEffects();
-    </script>
-</body>
-</html>
+            <div class="pot
