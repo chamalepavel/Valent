@@ -301,6 +301,122 @@
             50% { transform: scale(1.05); }
         }
 
+        /* Share buttons */
+        .share-section {
+            margin-top: 40px;
+            text-align: center;
+            z-index: 200;
+        }
+
+        .share-text {
+            color: var(--cream);
+            font-family: 'Georgia', serif;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 2s forwards;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 2.5s forwards;
+        }
+
+        .btn-share {
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-family: 'Georgia', serif;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-share-yes {
+            background: linear-gradient(135deg, var(--rose), var(--rose-light));
+            color: white;
+            border: none;
+        }
+
+        .btn-share-yes:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(139, 41, 66, 0.5);
+        }
+
+        .btn-share-no {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--cream);
+            border: 1px solid var(--gold);
+        }
+
+        .btn-share-no:hover {
+            background: rgba(201, 169, 110, 0.2);
+            transform: scale(1.05);
+        }
+
+        /* Response indicator */
+        .response-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: var(--cream);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-family: 'Georgia', serif;
+            font-size: 0.9rem;
+            z-index: 1000;
+            display: none;
+            border: 1px solid var(--gold);
+        }
+
+        .response-indicator.show {
+            display: block;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .response-indicator.yes {
+            border-color: var(--rose);
+            color: var(--rose-light);
+        }
+
+        .response-indicator.no {
+            border-color: #ff4444;
+            color: #ff6666;
+        }
+
+        /* Back button */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--cream);
+            border: 1px solid var(--gold);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-family: 'Georgia', serif;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .back-btn.show {
+            display: block;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .back-btn:hover {
+            background: rgba(201, 169, 110, 0.2);
+        }
+
         /* Mobile */
         @media (max-width: 600px) {
             .container { padding: 15px; }
@@ -337,6 +453,18 @@
         <div id="floatContainer"></div>
         <div id="sparkleContainer"></div>
         <div id="petalContainer"></div>
+        <!-- Share section for Yes response -->
+        <div class="share-section" id="shareSectionYes" style="position: absolute; bottom: 50px; left: 0; right: 0;">
+            <p class="share-text">¡Comparte esta respuesta!</p>
+            <div class="share-buttons">
+                <button class="btn-share btn-share-yes" onclick="copyLink('yes')">
+                    <span>🌹</span> Compartir "Sí"
+                </button>
+                <button class="btn-share btn-share-no" onclick="copyLink('no')">
+                    <span>💔</span> Compartir "No"
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- Error Screen -->
@@ -348,10 +476,33 @@
                 <div class="countdown-label" id="countdown">10</div>
                 <p style="color: #ff8888; font-family: Georgia, serif; margin-top: 10px;">se autodestruira en <span id="secLabel">secs</span></p>
             </div>
+            <!-- Share section for No response -->
+            <div class="share-section" id="shareSectionNo">
+                <p class="share-text">¡Comparte esta respuesta!</p>
+                <div class="share-buttons">
+                    <button class="btn-share btn-share-yes" onclick="copyLink('yes')">
+                        <span>🌹</span> Compartir "Sí"
+                    </button>
+                    <button class="btn-share btn-share-no" onclick="copyLink('no')">
+                        <span>💔</span> Compartir "No"
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
+    <!-- Response indicator (shows who responded via link) -->
+    <div class="response-indicator" id="responseIndicator"></div>
+
+    <!-- Back button -->
+    <button class="back-btn" id="backBtn" onclick="goBack()">← Volver</button>
+
     <script>
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const answer = urlParams.get('answer');
+        let isFromLink = false;
+
         // Create floating particles
         const particles = document.getElementById('particles');
         const emojis = ['🌹', '💕', '💖', '💗', '💓', '💝', '❤️', '🥀', '🌸', '🌺'];
@@ -364,6 +515,69 @@
             p.style.animationDelay = Math.random() * 12 + 's';
             p.style.animationDuration = (Math.random() * 6 + 10) + 's';
             particles.appendChild(p);
+        }
+
+        // Handle URL parameters on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            if (answer === 'yes') {
+                isFromLink = true;
+                showResponseIndicator('yes');
+                showBackButton();
+                sayYes();
+            } else if (answer === 'no') {
+                isFromLink = true;
+                showResponseIndicator('no');
+                showBackButton();
+                sayNo();
+            }
+        });
+
+        // Show response indicator when coming from link
+        function showResponseIndicator(response) {
+            const indicator = document.getElementById('responseIndicator');
+            indicator.textContent = response === 'yes' ? '🌹 Respondió SÍ' : '💔 Respondió NO';
+            indicator.classList.add('show', response);
+        }
+
+        // Show back button when coming from link
+        function showBackButton() {
+            document.getElementById('backBtn').classList.add('show');
+        }
+
+        // Go back to main screen
+        function goBack() {
+            // Clear URL parameters without reloading
+            window.history.pushState({}, document.title, window.location.pathname);
+            document.getElementById('flowersScreen').classList.remove('show');
+            document.getElementById('errorScreen').classList.remove('show');
+            document.getElementById('mainScreen').style.display = 'flex';
+            document.getElementById('responseIndicator').classList.remove('show');
+            document.getElementById('backBtn').classList.remove('show');
+            isFromLink = false;
+        }
+
+        // Function to get shareable link
+        function getShareableLink(response) {
+            const baseUrl = window.location.href.split('?')[0];
+            return `${baseUrl}?answer=${response}`;
+        }
+
+        // Function to copy link to clipboard
+        async function copyLink(response) {
+            const link = getShareableLink(response);
+            try {
+                await navigator.clipboard.writeText(link);
+                alert('¡Link copiado al portapapeles! Ahora puedes compartirlo 💕');
+            } catch (err) {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = link;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('¡Link copiado al portapapeles! Ahora puedes compartirlo 💕');
+            }
         }
 
         // Real flowers emojis
