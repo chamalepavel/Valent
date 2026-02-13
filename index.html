@@ -352,64 +352,6 @@
             90% { transform: translate(-2px, -2px); }
         }
 
-        /* Share buttons */
-        .share-section {
-            margin-top: 40px;
-            text-align: center;
-            z-index: 200;
-        }
-
-        .share-text {
-            color: var(--cream);
-            font-family: 'Georgia', serif;
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            opacity: 0;
-            animation: fadeInUp 1s ease-out 2s forwards;
-        }
-
-        .share-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-            opacity: 0;
-            animation: fadeInUp 1s ease-out 2.5s forwards;
-        }
-
-        .btn-share {
-            padding: 12px 30px;
-            font-size: 1rem;
-            font-family: 'Georgia', serif;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-share-yes {
-            background: linear-gradient(135deg, var(--rose), var(--rose-light));
-            color: white;
-            border: none;
-        }
-
-        .btn-share-yes:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(139, 41, 66, 0.5);
-        }
-
-        .btn-share-no {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--cream);
-            border: 1px solid var(--gold);
-        }
-
-        .btn-share-no:hover {
-            background: rgba(201, 169, 110, 0.2);
-            transform: scale(1.05);
-        }
 
         /* Response indicator */
         .response-indicator {
@@ -584,30 +526,6 @@
             document.getElementById('responseIndicator').classList.remove('show');
             document.getElementById('backBtn').classList.remove('show');
             isFromLink = false;
-        }
-
-        // Function to get shareable link
-        function getShareableLink(response) {
-            const baseUrl = window.location.href.split('?')[0];
-            return `${baseUrl}?answer=${response}`;
-        }
-
-        // Function to copy link to clipboard
-        async function copyLink(response) {
-            const link = getShareableLink(response);
-            try {
-                await navigator.clipboard.writeText(link);
-                alert('¡Link copiado al portapapeles! Ahora puedes compartirlo 💕');
-            } catch (err) {
-                // Fallback for older browsers
-                const textArea = document.createElement('textarea');
-                textArea.value = link;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                alert('¡Link copiado al portapapeles! Ahora puedes compartirlo 💕');
-            }
         }
 
         // Real flowers emojis
