@@ -433,7 +433,7 @@
 
     <!-- Main Screen -->
     <div class="container" id="mainScreen">
-        <p class="question">¿Quieres ser mi Valentine?</p>
+        <p class="question">Edna, ¿quieres ser mi Valentine?</p>
         
         <div class="roses-decoration">
             <span class="rose-dec">🌹</span>
@@ -667,35 +667,35 @@
             }, 1000);
         }
 
-        // Run away button - moves but still clickable
+        // Run away button - makes it very hard to click but possible
         function runAway() {
             const btn = document.querySelector('.btn-no');
             const screenWidth = window.innerWidth;
             const screenHeight = window.innerHeight;
-            const btnWidth = 120;
-            const btnHeight = 55;
             
-            // Move to random position - but closer to make it clickable
-            const maxX = Math.max(0, screenWidth - btnWidth - 60);
-            const maxY = Math.max(0, screenHeight - btnHeight - 60);
-            const newX = Math.random() * maxX + 30;
-            const newY = Math.random() * maxY + 30;
+            // Make the button smaller and harder to catch
+            btn.style.transform = 'scale(0.8)';
+            btn.style.transition = 'all 0.15s ease-out';
+            
+            // Move to random position - but keep it reachable with effort
+            // Use a smaller area in the center to make it clickable but tricky
+            const centerX = screenWidth * 0.3 + Math.random() * screenWidth * 0.4;
+            const centerY = screenHeight * 0.3 + Math.random() * screenHeight * 0.4;
             
             btn.style.position = 'fixed';
-            btn.style.left = newX + 'px';
-            btn.style.top = newY + 'px';
+            btn.style.left = centerX + 'px';
+            btn.style.top = centerY + 'px';
             btn.style.zIndex = '1000';
-            btn.style.transform = 'none';
-            btn.style.transition = 'left 0.3s ease-out, top 0.3s ease-out';
             
-            // Reset position after 3 seconds
+            // Reset position after 2 seconds (faster reset)
             clearTimeout(btn.runAwayTimeout);
             btn.runAwayTimeout = setTimeout(() => {
                 btn.style.position = '';
                 btn.style.left = '';
                 btn.style.top = '';
                 btn.style.zIndex = '';
-            }, 3000);
+                btn.style.transform = '';
+            }, 2000);
         }
         
         // Reset button position when clicking elsewhere
