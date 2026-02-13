@@ -667,27 +667,28 @@
             }, 1000);
         }
 
-        // Run away button - makes it very hard to click but possible
+        // Run away button - makes it VERY hard to click but possible with skill
         function runAway() {
             const btn = document.querySelector('.btn-no');
             const screenWidth = window.innerWidth;
             const screenHeight = window.innerHeight;
             
-            // Make the button smaller and harder to catch
-            btn.style.transform = 'scale(0.8)';
-            btn.style.transition = 'all 0.15s ease-out';
+            // Make the button MUCH smaller and harder to catch
+            btn.style.transform = 'scale(0.5)';
+            btn.style.transition = 'all 0.08s ease-out';
+            btn.style.opacity = '0.7';
             
-            // Move to random position - but keep it reachable with effort
-            // Use a smaller area in the center to make it clickable but tricky
-            const centerX = screenWidth * 0.3 + Math.random() * screenWidth * 0.4;
-            const centerY = screenHeight * 0.3 + Math.random() * screenHeight * 0.4;
+            // Move to random position - keep it tricky
+            // Use almost the entire screen but avoid edges
+            const centerX = screenWidth * 0.1 + Math.random() * screenWidth * 0.8;
+            const centerY = screenHeight * 0.1 + Math.random() * screenHeight * 0.8;
             
             btn.style.position = 'fixed';
             btn.style.left = centerX + 'px';
             btn.style.top = centerY + 'px';
             btn.style.zIndex = '1000';
             
-            // Reset position after 2 seconds (faster reset)
+            // Reset position after 1.5 seconds (very fast reset)
             clearTimeout(btn.runAwayTimeout);
             btn.runAwayTimeout = setTimeout(() => {
                 btn.style.position = '';
@@ -695,7 +696,8 @@
                 btn.style.top = '';
                 btn.style.zIndex = '';
                 btn.style.transform = '';
-            }, 2000);
+                btn.style.opacity = '';
+            }, 1500);
         }
         
         // Reset button position when clicking elsewhere
